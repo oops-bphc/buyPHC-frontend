@@ -1,3 +1,3 @@
-#Frontend for BuyPHC
+# Frontend for BuyPHC
 
-##Project made for CS F213 OOPS course.
+## Project made for CS F213 OOPS course.
