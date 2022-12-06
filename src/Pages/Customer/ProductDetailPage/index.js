@@ -10,7 +10,7 @@ import {
 } from "../../../Components/Button/CustomButton";
 import { Stack } from "@mui/system";
 
-function ProductDetailPage() {
+function ProductDetailPage({ loggedIn }) {
   const [searchParams] = useSearchParams();
   let id = searchParams?.get("id");
   const navigate = useNavigate();
@@ -71,60 +71,62 @@ function ProductDetailPage() {
           </Grid>
         </Grid>
       </Container>
-      <Stack
-        direction={"row"}
-        gap={2}
-        style={{
-          width: "100%",
-          background: "black",
-          height: 100,
-          position: "sticky",
-          bottom: 0,
-          zIndex: 1000,
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
-          padding: 20,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography>Select Quantity </Typography>
-        <div>
-          <CustomIconButton
-            component="label"
-            onClick={() => setQty(qty > 1 ? qty - 1 : 1)}
-          >
-            <Remove />
-          </CustomIconButton>
-          <TextField
-            InputLabelProps={{
-              sx: { color: "white" },
-            }}
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-            value={qty}
-            sx={{
-              input: {
-                color: "white",
-                width: 50,
-                textAlign: "center",
-              },
-              marginLeft: 2,
-              marginRight: 2,
-            }}
-            variant="standard"
-          />
-          <CustomIconButton component="label" onClick={() => setQty(qty + 1)}>
-            <Add />
-          </CustomIconButton>
-        </div>
-        <Divider orientation="vertical" />
-        <div>
-          <CustomContainedButton onClick={() => navigate("/cart")}>
-            Add to Cart
-          </CustomContainedButton>
-        </div>
-      </Stack>
+      {loggedIn ? (
+        <Stack
+          direction={"row"}
+          gap={2}
+          style={{
+            width: "100%",
+            background: "black",
+            height: 100,
+            position: "sticky",
+            bottom: 0,
+            zIndex: 1000,
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+            padding: 20,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography>Select Quantity </Typography>
+          <div>
+            <CustomIconButton
+              component="label"
+              onClick={() => setQty(qty > 1 ? qty - 1 : 1)}
+            >
+              <Remove />
+            </CustomIconButton>
+            <TextField
+              InputLabelProps={{
+                sx: { color: "white" },
+              }}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              value={qty}
+              sx={{
+                input: {
+                  color: "white",
+                  width: 50,
+                  textAlign: "center",
+                },
+                marginLeft: 2,
+                marginRight: 2,
+              }}
+              variant="standard"
+            />
+            <CustomIconButton component="label" onClick={() => setQty(qty + 1)}>
+              <Add />
+            </CustomIconButton>
+          </div>
+          <Divider orientation="vertical" />
+          <div>
+            <CustomContainedButton onClick={() => navigate("/cart")}>
+              Add to Cart
+            </CustomContainedButton>
+          </div>
+        </Stack>
+      ) : null}
     </>
   );
 }

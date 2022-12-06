@@ -7,42 +7,49 @@ import {
   Typography,
 } from "@mui/material";
 // import { ReactComponent as AniliteLoader } from "../Media/AniliteLoader.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { CustomContainedButton } from "../../Components/Button/CustomButton";
 import { Container } from "../../Components/Container";
+import axios from "axios";
 
 var getCookies = function () {
   const allCookies = document.cookie;
   console.log(allCookies);
 };
 
-function Login() {
-  const [mail, setMail] = React.useState("");
+function Login({ setLoggedIn }) {
+  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [credentialError, setCredentialError] = React.useState(false);
-  // const handleSubmit = async () => {
-  //   try {
-  //     await axios
-  //       .post(
-  //         "https://fab6-103-48-103-234.ngrok.io/user/login",
-  //         {
-  //           email: mail,
-  //           password: password,
-  //         },
-  //         {
-  //           credentials: "include",
-  //         }
-  //       )
-  //       .then((res) => console.log(res));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  const newEntry = {
-    email: mail,
-    password: password,
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("POST", `${process.env.REACT_APP_ROOT_URL}/token`);
+    // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    // xhr.send("Username=" + username, "Password=" + password);
+    // xhr.onload = function () {
+    //   let data = JSON.parse(xhr.responseText);
+    //   console.log("Signed in as: ", data);
+    // localStorage.setItem("SavedToken", "Bearer " + data.token);
+    // setLoggedIn(true);
+    // };
+    localStorage.setItem(
+      "token",
+      "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY29nbnVzYm9pIiwiZXhwIjoxNjcwMzI2MDkwLCJpYXQiOjE2NzAzMjI0OTAsInNjb3BlIjoiUk9MRV9BRE1JTiJ9.ZFTS8uLNpk3bPmReeH_LIEtrVma1HxOFPjTKmP2rU_2fPGXWDE79__j1b8a8rcQoYWTZUMEVdKBV4mLyJiXqWHPdd7Zqw1IYN2lbUOoPdTszQvNsxWqWHdrp2Djud83KziUpo13VHnQKd5tgCGHyCCkYAKvPn7DZaK59Kk9lG2ur2ynRazWBAGCq3NFrM-R9Lru5yDXIz5N3QKZjGL55xqDPvQZtWynGscTVWwFakx4oE4lUKreDTxRT9IgsD4BnxD4fPojwSYH798v2FSib9oz5A9IyCvG8jJ8t-05-jUCBv4ISoNYGg5Dm1i5BKg83z5u-_2wbroIrNeHtzaH4qA"
+    );
+    setLoggedIn(true);
+    navigate("/");
+    // const data = await axios.get(
+    //   `${process.env.REACT_APP_ROOT_URL}/product/all`,
+    //   {
+    //     headers: { Authorization: localStorage.getItem("token") },
+    //   }
+    // );
+    // console.log(data);
   };
 
   return (
@@ -79,14 +86,14 @@ function Login() {
         >
           <TextField
             id="loginEmail"
-            label="Email"
+            label="Username"
             size="small"
             type="text"
             InputLabelProps={{
               sx: { color: "primary.main" },
             }}
             sx={{ input: { color: "white" }, width: { xs: "90%", md: "70%" } }}
-            onChange={(e) => setMail(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
             id="loginPassword"
@@ -130,7 +137,7 @@ function Login() {
           </Typography>
           <CustomContainedButton
             disabled={credentialError ? true : false}
-            // onClick={() => handleSubmit()}
+            onClick={() => handleSubmit()}
           >
             Submit
           </CustomContainedButton>

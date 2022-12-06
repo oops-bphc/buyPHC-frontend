@@ -1,10 +1,7 @@
-import { ThemeProvider } from "@mui/material";
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { HomeContainer } from "../Components/Container";
 import Footer from "../Components/Footer/Footer";
-import Navbar from "../Components/Navbar";
-import darkTheme from "../Media/DarkTheme";
 import AccountPage from "../Pages/Customer/AccountPage/AccountPage";
 import ResetPassword from "../Pages/Auth/ResetPassword";
 import Login from "../Pages/Auth/Login";
@@ -16,29 +13,47 @@ import WalletPage from "../Pages/Customer/WalletPage";
 import ScrollToTop from "../Utils/ScrollToTop";
 import Register from "../Pages/Auth/Register";
 
-function CustomerNavigation() {
+function CustomerNavigation({ loggedIn, setLoggedIn }) {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <BrowserRouter>
-        <Navbar />
-        <HomeContainer>
-          <ScrollToTop>
+    <>
+      <HomeContainer>
+        <ScrollToTop>
+          {loggedIn ? (
             <Routes>
               <Route path="/" element={<Homepage />} />
-              <Route path="/product" element={<ProductDetailPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route
+                path="/product"
+                element={<ProductDetailPage loggedIn={loggedIn} />}
+              />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/cart" element={<CartPage />} />
               <Route path="/wallet" element={<WalletPage />} />
               <Route path="/my-orders" element={<OrderHistoryPage />} />
               <Route path="/my-account" element={<AccountPage />} />
+              <Route path="/*" element={<Homepage />} />
             </Routes>
-          </ScrollToTop>
-        </HomeContainer>
-        <Footer />
-      </BrowserRouter>
-    </ThemeProvider>
+          ) : (
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route
+                path="/product"
+                element={<ProductDetailPage loggedIn={loggedIn} />}
+              />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route
+                path="/login"
+                element={
+                  <Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                }
+              />
+              <Route path="/register" element={<Register />} />
+              <Route path="*" element={<Navigate to={"/login"} />} />
+            </Routes>
+          )}
+        </ScrollToTop>
+      </HomeContainer>
+      <Footer />
+    </>
   );
 }
 

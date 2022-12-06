@@ -1,12 +1,29 @@
-import { Typography, AppBar, Box, Toolbar, Stack } from "@mui/material";
+import {
+  Typography,
+  AppBar,
+  Box,
+  Toolbar,
+  Stack,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import React from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import { CustomOutlinedButton, CustomTextButton } from "../Button/CustomButton";
 import SearchModal from "../Search";
 
-export default function Navbar() {
-  const location = useLocation();
+export default function Navbar({ loggedIn, setLoggedIn, user }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
+  const location = useLocation();
+  const navigate = useNavigate();
   const [navbarOpacity, setNavbarOpacity] = React.useState(0);
   const listenScrollEvent = () => {
     if (window.scrollY > window.innerHeight / 2) {
@@ -28,6 +45,12 @@ export default function Navbar() {
     }
   }, [location.pathname]);
 
+  const Logout = () => {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+    navigate("/");
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 1, display: { xs: "none", lg: "block" } }}>
@@ -41,39 +64,46 @@ export default function Navbar() {
         >
           <Toolbar>
             <Stack direction="row" spacing={0.25}>
-              <NavLink
-                style={({ isActive }) => {
-                  return {
-                    background: isActive ? "rgba(139, 92, 246, 1)" : "",
-                    borderRadius: 3,
-                  };
-                }}
-                to="/"
-              >
-                <CustomTextButton>Home</CustomTextButton>
-              </NavLink>
-              <NavLink
-                style={({ isActive }) => {
-                  return {
-                    background: isActive ? "rgba(139, 92, 246, 1)" : "",
-                    borderRadius: 3,
-                  };
-                }}
-                to="/cart"
-              >
-                <CustomTextButton>Cart</CustomTextButton>
-              </NavLink>
-              <NavLink
-                style={({ isActive }) => {
-                  return {
-                    background: isActive ? "rgba(139, 92, 246, 1)" : "",
-                    borderRadius: 3,
-                  };
-                }}
-                to="/wallet"
-              >
-                <CustomTextButton>Wallet</CustomTextButton>
-              </NavLink>
+              {loggedIn ? (
+                user === "customer" ? (
+                  <>
+                    <NavLink
+                      style={({ isActive }) => {
+                        return {
+                          background: isActive ? "rgba(139, 92, 246, 1)" : "",
+                          borderRadius: 3,
+                        };
+                      }}
+                      to="/"
+                    >
+                      <CustomTextButton>Home</CustomTextButton>
+                    </NavLink>
+
+                    <NavLink
+                      style={({ isActive }) => {
+                        return {
+                          background: isActive ? "rgba(139, 92, 246, 1)" : "",
+                          borderRadius: 3,
+                        };
+                      }}
+                      to="/cart"
+                    >
+                      <CustomTextButton>Cart</CustomTextButton>
+                    </NavLink>
+                    <NavLink
+                      style={({ isActive }) => {
+                        return {
+                          background: isActive ? "rgba(139, 92, 246, 1)" : "",
+                          borderRadius: 3,
+                        };
+                      }}
+                      to="/wallet"
+                    >
+                      <CustomTextButton>Wallet</CustomTextButton>
+                    </NavLink>
+                  </>
+                ) : null
+              ) : null}
             </Stack>
             <div
               style={{
@@ -93,17 +123,61 @@ export default function Navbar() {
               sx={{ marginLeft: "auto", marginRight: 0, alignItems: "center" }}
             >
               <SearchModal />
-              <NavLink
-                style={({ isActive }) => {
-                  return {
-                    background: isActive ? "rgba(139, 92, 246, 1)" : "",
-                    borderRadius: 3,
-                  };
-                }}
-                to="/login"
-              >
-                <CustomOutlinedButton>Login</CustomOutlinedButton>
-              </NavLink>
+              {!loggedIn ? (
+                <NavLink
+                  style={({ isActive }) => {
+                    return {
+                      background: isActive ? "rgba(139, 92, 246, 1)" : "",
+                      borderRadius: 3,
+                    };
+                  }}
+                  to="/login"
+                >
+                  <CustomOutlinedButton>Login</CustomOutlinedButton>
+                </NavLink>
+              ) : (
+                <>
+                  <CustomOutlinedButton onClick={handleClick}>
+                    Hi, Aarush
+                  </CustomOutlinedButton>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        navigate("/my-account");
+                        handleClose();
+                      }}
+                    >
+                      My Account
+                    </MenuItem>
+                    {user === "customer" ? (
+                      <MenuItem
+                        onClick={() => {
+                          navigate("/my-orders");
+                          handleClose();
+                        }}
+                      >
+                        My Orders
+                      </MenuItem>
+                    ) : null}
+                    <MenuItem
+                      onClick={() => {
+                        handleClose();
+                        Logout();
+                      }}
+                    >
+                      Logout
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
             </Stack>
           </Toolbar>
         </AppBar>
