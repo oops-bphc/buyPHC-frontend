@@ -65,7 +65,7 @@ export default function Navbar({ loggedIn, setLoggedIn, user }) {
           <Toolbar>
             <Stack direction="row" spacing={0.25}>
               {loggedIn ? (
-                user === "customer" ? (
+                user && user.role === "ROLE_CUSTOMER" ? (
                   <>
                     <NavLink
                       style={({ isActive }) => {
@@ -138,7 +138,7 @@ export default function Navbar({ loggedIn, setLoggedIn, user }) {
               ) : (
                 <>
                   <CustomOutlinedButton onClick={handleClick}>
-                    Hi, Aarush
+                    Hi, {user.username}
                   </CustomOutlinedButton>
                   <Menu
                     id="basic-menu"
@@ -157,7 +157,7 @@ export default function Navbar({ loggedIn, setLoggedIn, user }) {
                     >
                       My Account
                     </MenuItem>
-                    {user === "customer" ? (
+                    {user && user.role === "ROLE_CUSTOMER" ? (
                       <MenuItem
                         onClick={() => {
                           navigate("/my-orders");
