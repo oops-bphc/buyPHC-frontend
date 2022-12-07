@@ -14,13 +14,19 @@ import ScrollToTop from "../Utils/ScrollToTop";
 import Register from "../Pages/Auth/Register";
 
 function CustomerNavigation({ loggedIn, setLoggedIn }) {
+  const [products, setProducts] = React.useState([]);
   return (
     <>
       <HomeContainer>
         <ScrollToTop>
           {loggedIn ? (
             <Routes>
-              <Route path="/" element={<Homepage />} />
+              <Route
+                path="/"
+                element={
+                  <Homepage products={products} setProducts={setProducts} />
+                }
+              />
               <Route
                 path="/product"
                 element={<ProductDetailPage loggedIn={loggedIn} />}
@@ -30,11 +36,21 @@ function CustomerNavigation({ loggedIn, setLoggedIn }) {
               <Route path="/wallet" element={<WalletPage />} />
               <Route path="/my-orders" element={<OrderHistoryPage />} />
               <Route path="/my-account" element={<AccountPage />} />
-              <Route path="/*" element={<Homepage />} />
+              <Route
+                path="/*"
+                element={
+                  <Homepage products={products} setProducts={setProducts} />
+                }
+              />
             </Routes>
           ) : (
             <Routes>
-              <Route path="/" element={<Homepage />} />
+              <Route
+                path="/"
+                element={
+                  <Homepage products={products} setProducts={setProducts} />
+                }
+              />
               <Route
                 path="/product"
                 element={<ProductDetailPage loggedIn={loggedIn} />}

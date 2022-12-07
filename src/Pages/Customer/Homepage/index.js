@@ -4,9 +4,9 @@ import React from "react";
 import HomePageCarousel from "../../../Components/HomepageCarousel";
 import ItemCarousel from "../../../Components/ItemCarousel";
 
-function Homepage() {
-  const [products, setProducts] = React.useState([]);
-
+function Homepage({ products, setProducts }) {
+	const [fashion, setFashion] = React.useState([]);
+	const [electronics, setElectronics] = React.useState([]);
   React.useEffect(() => {
     const AllProducts = async () => {
       const data = await axios.get(
@@ -31,6 +31,16 @@ function Homepage() {
     AllProducts();
   }, []);
 
+	const useCategory = (category, setFunc) => {
+		React.useEffect(() => {
+			axios.get(`${process.env.REACT_APP_ROOT_URL}/product/${category}`,
+				{ headers: { Authorization: localStorage.getItem("token") } }
+				).then(response => setFunc(response.data));
+		}, []);
+	};
+
+	useCategory("FASHION", setFashion);
+	useCategory("ELECTRONICS", setElectronics);
   return (
     <>
       <HomePageCarousel />
@@ -39,19 +49,19 @@ function Homepage() {
           <Typography variant="h4" pb={2}>
             New Arrivals
           </Typography>
-          <ItemCarousel data={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]} />
+          <ItemCarousel data={products} />
         </div>
         <div style={{ marginTop: 30 }}>
           <Typography variant="h4" pb={2}>
             Top Fashion
           </Typography>
-          <ItemCarousel data={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]} />
+          <ItemCarousel data={fashion} />
         </div>
         <div style={{ marginTop: 30 }}>
           <Typography variant="h4" pb={2}>
             Top Electronics
           </Typography>
-          <ItemCarousel data={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]} />
+          <ItemCarousel data={electronics} />
         </div>
       </div>
     </>

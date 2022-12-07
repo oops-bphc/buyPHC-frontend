@@ -50,7 +50,11 @@ function Footer() {
       <Stack
         direction={"row"}
         spacing={2}
-        sx={{ position: "relative", top: "37%", justifyContent: "center" }}
+        sx={{
+          position: "relative",
+          top: "37%",
+          justifyContent: "center",
+        }}
       >
         <Link to="/" exact>
           <Typography
@@ -106,7 +110,7 @@ function Footer() {
           cursor: "default",
         }}
       >
-        © AniLite 2022
+        © BuyPHC 2022
       </Typography>
     </div>
   );

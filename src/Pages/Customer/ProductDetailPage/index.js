@@ -3,18 +3,32 @@ import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Container } from "../../../Components/Container";
 import ItemCarousel from "../../../Components/ItemCarousel";
-import { Add, Remove } from "@mui/icons-material";
+import { Add, Remove, SettingsRemoteSharp } from "@mui/icons-material";
 import {
   CustomContainedButton,
   CustomIconButton,
 } from "../../../Components/Button/CustomButton";
 import { Stack } from "@mui/system";
+import axios from "axios";
 
-function ProductDetailPage({ loggedIn }) {
+function ProductDetailPage({ loggedIn, data }) {
   const [searchParams] = useSearchParams();
   let id = searchParams?.get("id");
+	const [productDetails, setProductDetails] = React.useState({});
   const navigate = useNavigate();
   const [qty, setQty] = React.useState(1);
+
+	React.useEffect(() => {
+		const fetchProductDetails = async () => {
+			const params = new URLSearchParams([['product-id', id]]);
+			const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/product`,
+				{ params },
+				{ headers: { Authorization: localStorage.getItem("token") } },
+				);
+			setProductDetails(response.data);
+		};
+		fetchProductDetails().catch(console.error);
+	}, []);
 
   return (
     <>
@@ -23,7 +37,7 @@ function ProductDetailPage({ loggedIn }) {
           <Grid item md={1} />
           <Grid item md={4}>
             <img
-              src="https://images.meesho.com/images/products/44009963/kxwus_512.jpg"
+              src={productDetails.image}
               alt=""
               style={{ width: "100%", borderRadius: 10, cursor: "zoom-in" }}
             />
@@ -31,26 +45,21 @@ function ProductDetailPage({ loggedIn }) {
           <Grid item md={1} />
           <Grid item md={5}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
-              SHOES
+							{productDetails.name}
             </Typography>
             <Typography variant="h6" sx={{ textDecoration: "line-through" }}>
-              Rs. 2300
+              Rs. {productDetails.price}
             </Typography>
             <Typography variant="h5" sx={{ color: "red" }}>
-              Rs. 2000
+              Rs. {productDetails.offer}
             </Typography>
-            <Typography variant="subtitle2">Only 7 left in stock</Typography>
+            <Typography variant="subtitle2">Only {productDetails.qtyAvailable} left in stock</Typography>
             <div style={{ marginTop: 30 }}>
               <Typography variant="subtitle1" sx={{ color: "gray" }}>
-                Product Descrition
+                Product Description
               </Typography>
               <Typography style={{ whiteSpace: "pre-line" }}>
-                Amzing Product by this company! {"\n"} Sole: Rubber {"\n"}
-                Closure: Pull On{"\n"} Shoe Width: Medium {"\n"}Style
-                Name:-Sneaker {"\n"}
-                Model Name:-Puma Knit Slip On IDP{"\n"} Material Type:-Mesh and
-                Rubber {"\n"}Fastening Type:-Slip-On{"\n"} Wipe with a clean dry
-                cloth
+								{productDetails.description}
               </Typography>
             </div>
             <div style={{ marginTop: 30 }}>
@@ -58,7 +67,7 @@ function ProductDetailPage({ loggedIn }) {
                 Delivery In
               </Typography>
               <Typography style={{ whiteSpace: "pre-line" }}>
-                In 7 business days.
+                In {productDetails.deliveryTime} business days.
               </Typography>
             </div>
           </Grid>
