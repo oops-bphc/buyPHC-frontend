@@ -49,7 +49,7 @@ function ItemCarousel({ data }) {
       centerMode={false}
       ssr
       swipeable={true}
-      partialVisbile={true}
+      partialVisible={true}
     >
       {Array.from(data).map((item, _id) => (
         <div key={item.id}>

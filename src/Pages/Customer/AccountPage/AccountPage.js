@@ -14,6 +14,7 @@ import {
   CustomTextButton,
 } from '../../../Components/Button/CustomButton';
 import { Container } from '../../../Components/Container';
+import axios from "axios";
 
 var getCookies = function () {
   const allCookies = document.cookie;
@@ -56,6 +57,24 @@ function AccountPage({ user, setUser }) {
   const [phoneNumber, setPhoneNumber] = React.useState(user.phoneNumber);
   const [address, setAddress] = React.useState(user.address);
   const [editable, setEditable] = React.useState(false);
+
+	const handleSubmit = async () => {
+		const newUser = {
+			...user,
+			username,
+			email,
+			phoneNumber,
+			address
+		};
+		setUser(newUser);
+		await axios.put(`${process.env.REACT_APP_ROOT_URL}/customer`,
+			newUser,
+			{ 
+				params: {'customer-id': user.id}, 
+				headers: { Authorization: localStorage.getItem("token") }
+			},
+		);
+	};
 
   const navigate = useNavigate();
   return (
@@ -130,13 +149,7 @@ function AccountPage({ user, setUser }) {
           disabled={!editable}
           variant='body2'
           sx={{ color: 'primary.main' }}
-					onClick={() => setUser({
-						...user,
-						username,
-						email,
-						phoneNumber,
-						address
-					})}
+					onClick={handleSubmit}
         >
           Save
         </CustomTextButton>

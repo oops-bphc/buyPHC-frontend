@@ -6,13 +6,29 @@ import {
   Stack,
   Menu,
   MenuItem,
-} from "@mui/material";
-import React from "react";
-import { useLocation, NavLink, useNavigate } from "react-router-dom";
-import { CustomOutlinedButton, CustomTextButton } from "../Button/CustomButton";
-import SearchModal from "../Search";
+} from '@mui/material';
+import React from 'react';
+import { useLocation, NavLink, useNavigate } from 'react-router-dom';
+import { CustomOutlinedButton, CustomTextButton } from '../Button/CustomButton';
+import SearchModal from '../Search';
 
-export default function Navbar({ loggedIn, setLoggedIn, user }) {
+const NavBarItem = ({label, link}) => {
+  return (
+    <NavLink
+      style={({isActive}) => {
+        return {
+          background: isActive ? 'rgba(139, 92, 246, 1)' : '',
+          borderRadius: 3,
+        };
+      }}
+      to={link}
+    >
+      <CustomTextButton>{label}</CustomTextButton>
+    </NavLink>
+  );
+};
+
+export default function Navbar({ loggedIn, setLoggedIn, user, setUser }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -36,102 +52,83 @@ export default function Navbar({ loggedIn, setLoggedIn, user }) {
   };
 
   React.useEffect(() => {
-    if (location.pathname === "/" || location.pathname.includes("/anime/")) {
+    if (location.pathname === '/' || location.pathname.includes('/anime/')) {
       setNavbarOpacity(0);
-      window.addEventListener("scroll", listenScrollEvent);
-      return () => window.removeEventListener("scroll", listenScrollEvent);
+      window.addEventListener('scroll', listenScrollEvent);
+      return () => window.removeEventListener('scroll', listenScrollEvent);
     } else {
       setNavbarOpacity(1);
     }
   }, [location.pathname]);
 
   const Logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     setLoggedIn(false);
-    navigate("/");
+		setUser({});
+    navigate('/');
   };
 
   return (
     <>
-      <Box sx={{ flexGrow: 1, display: { xs: "none", lg: "block" } }}>
+      <Box sx={{ flexGrow: 1, display: { xs: 'none', lg: 'block' } }}>
         <AppBar
-          position="fixed"
+          position='fixed'
           sx={{
             background: `rgba(0,0,0,${navbarOpacity})`,
             height: 48,
-            justifyContent: "center",
+            justifyContent: 'center',
           }}
         >
           <Toolbar>
-            <Stack direction="row" spacing={0.25}>
-              {loggedIn ? (
-                user && user.role === "ROLE_CUSTOMER" ? (
+            <Stack direction='row' spacing={0.25}>
+              {Object.keys(user).length !== 0 && loggedIn ? (
+                user && user.role === 'ROLE_CUSTOMER' ? (
                   <>
-                    <NavLink
-                      style={({ isActive }) => {
-                        return {
-                          background: isActive ? "rgba(139, 92, 246, 1)" : "",
-                          borderRadius: 3,
-                        };
-                      }}
-                      to="/"
-                    >
-                      <CustomTextButton>Home</CustomTextButton>
-                    </NavLink>
-
-                    <NavLink
-                      style={({ isActive }) => {
-                        return {
-                          background: isActive ? "rgba(139, 92, 246, 1)" : "",
-                          borderRadius: 3,
-                        };
-                      }}
-                      to="/cart"
-                    >
-                      <CustomTextButton>Cart</CustomTextButton>
-                    </NavLink>
-                    <NavLink
-                      style={({ isActive }) => {
-                        return {
-                          background: isActive ? "rgba(139, 92, 246, 1)" : "",
-                          borderRadius: 3,
-                        };
-                      }}
-                      to="/wallet"
-                    >
-                      <CustomTextButton>Wallet</CustomTextButton>
-                    </NavLink>
+										<NavBarItem
+											label="Home"
+											link="/"
+										/>
+										<NavBarItem
+											label="Cart"
+											link="/cart"
+										/>
+										<NavBarItem
+											label="Wallet"
+											link="/wallet"
+										/>
                   </>
                 ) : null
               ) : null}
             </Stack>
             <div
               style={{
-                position: "absolute",
-                left: "50%",
-                transform: "translateX(-50%)",
-                cursor: "pointer",
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                cursor: 'pointer',
               }}
             >
-              <Typography variant="h4" color="secondary">
-                BuyPHC
+              <Typography variant='h4' color='secondary'>
+                <NavLink style={{ color: 'white' }} to='/'>
+                  BuyPHC
+                </NavLink>
               </Typography>
             </div>
             <Stack
-              direction={"row"}
+              direction={'row'}
               gap={2}
-              sx={{ marginLeft: "auto", marginRight: 0, alignItems: "center" }}
+              sx={{ marginLeft: 'auto', marginRight: 0, alignItems: 'center' }}
             >
               <SearchModal />
               {!loggedIn ? (
                 <NavLink
                   style={({ isActive }) => {
                     return {
-                      background: isActive ? "rgba(139, 92, 246, 1)" : "",
+                      background: isActive ? 'rgba(139, 92, 246, 1)' : '',
                       borderRadius: 3,
                     };
                   }}
-                  to="/login"
+                  to='/login'
                 >
                   <CustomOutlinedButton>Login</CustomOutlinedButton>
                 </NavLink>
@@ -141,26 +138,26 @@ export default function Navbar({ loggedIn, setLoggedIn, user }) {
                     Hi, {user.username}
                   </CustomOutlinedButton>
                   <Menu
-                    id="basic-menu"
+                    id='basic-menu'
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
                     MenuListProps={{
-                      "aria-labelledby": "basic-button",
+                      'aria-labelledby': 'basic-button',
                     }}
                   >
                     <MenuItem
                       onClick={() => {
-                        navigate("/my-account");
+                        navigate('/my-account');
                         handleClose();
                       }}
                     >
                       My Account
                     </MenuItem>
-                    {user && user.role === "ROLE_CUSTOMER" ? (
+                    {Object.keys(user).length !== 0  && user.role === 'ROLE_CUSTOMER' ? (
                       <MenuItem
                         onClick={() => {
-                          navigate("/my-orders");
+                          navigate('/my-orders');
                           handleClose();
                         }}
                       >

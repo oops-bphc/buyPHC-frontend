@@ -33,7 +33,7 @@ function CustomerNavigation({ loggedIn, setLoggedIn, user, setUser }) {
               />
               <Route path='/reset-password' element={<ResetPassword />} />
               <Route path='/cart' element={<CartPage />} />
-              <Route path='/wallet' element={<WalletPage />} />
+              <Route path='/wallet' element={<WalletPage user={user} setUser={setUser} />} />
               <Route path='/my-orders' element={<OrderHistoryPage />} />
               <Route
                 path='/my-account'

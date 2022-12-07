@@ -9,8 +9,23 @@ import {
 import React from "react";
 import { CustomContainedButton } from "../../../Components/Button/CustomButton";
 import { Container } from "../../../Components/Container";
+import axios from "axios";
 
-function WalletPage() {
+function WalletPage({user, setUser}) {
+	const [amount, setAmount] = React.useState(0);
+
+	const handleSubmit = async () => {
+		const newUser = {...user, 'wallet': user['wallet'] + amount};
+		setUser(newUser)
+		await axios.put(`${process.env.REACT_APP_ROOT_URL}/customer`,
+			newUser,
+			{ 
+				params: {'customer-id': user.id}, 
+				headers: { Authorization: localStorage.getItem("token") }
+			},
+		);
+	};
+
   return (
     <Container>
       <div
@@ -44,7 +59,7 @@ function WalletPage() {
           }}
         >
           <Typography variant="h5" color="secondary">
-            Balance: Rs. 2000
+            Balance: Rs. {user.wallet.toLocaleString("en-IN")}
           </Typography>
 
           <Accordion sx={{ background: "black", color: "white", width: "50%" }}>
@@ -72,6 +87,8 @@ function WalletPage() {
                   id="gorgotPassword"
                   label="Enter Amount"
                   size="small"
+									value={amount}
+									onChange={(e) => setAmount(parseInt(e.target.value))}
                   inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                   InputLabelProps={{
                     sx: { color: "primary.main" },
@@ -83,7 +100,7 @@ function WalletPage() {
                 />
 
                 <CustomContainedButton
-                // onClick={() => handleSubmit()}
+									onClick={handleSubmit}
                 >
                   Add
                 </CustomContainedButton>
