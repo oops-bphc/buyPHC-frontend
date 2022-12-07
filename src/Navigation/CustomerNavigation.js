@@ -29,10 +29,10 @@ function CustomerNavigation({ loggedIn, setLoggedIn, user, setUser }) {
               />
               <Route
                 path='/product'
-                element={<ProductDetailPage loggedIn={loggedIn} />}
+                element={<ProductDetailPage loggedIn={loggedIn} user={user} setUser={setUser}/>}
               />
               <Route path='/reset-password' element={<ResetPassword />} />
-              <Route path='/cart' element={<CartPage />} />
+              <Route path='/cart' element={<CartPage user={user} />} />
               <Route path='/wallet' element={<WalletPage user={user} setUser={setUser} />} />
               <Route path='/my-orders' element={<OrderHistoryPage />} />
               <Route

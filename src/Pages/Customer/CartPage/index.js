@@ -7,20 +7,20 @@ import {
   Grid,
   TextField,
   Typography,
-} from "@mui/material";
-import React from "react";
-import { useSearchParams } from "react-router-dom";
-import { Container } from "../../../Components/Container";
-import { Add, Delete, Remove } from "@mui/icons-material";
+} from '@mui/material';
+import React from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Container } from '../../../Components/Container';
+import { Add, Delete, Remove } from '@mui/icons-material';
 import {
   CustomContainedButton,
   CustomIconButton,
-} from "../../../Components/Button/CustomButton";
-import { Stack } from "@mui/system";
+} from '../../../Components/Button/CustomButton';
+import { Stack } from '@mui/system';
 
-function CartPage() {
+function CartPage({ user, setUser }) {
   const [searchParams] = useSearchParams();
-  let id = searchParams?.get("id");
+  let id = searchParams?.get('id');
 
   return (
     <>
@@ -29,73 +29,76 @@ function CartPage() {
           <Grid item md={4} />
           <Grid item md={4}>
             <Stack gap={2}>
-              {[1, 1, 1, 1, 1, 1].map((item, id) => (
+              {user.cart.map((item) => (
                 <Card
+                  key={item.id}
                   sx={{
-                    display: "flex",
-                    background: "#111111",
-                    color: "white",
+                    display: 'flex',
+                    background: '#111111',
+                    color: 'white',
                   }}
                 >
                   <CardMedia
-                    component="img"
+                    component='img'
                     sx={{ width: 151 }}
-                    image="https://images.meesho.com/images/products/44009963/kxwus_512.jpg"
-                    alt="Live from space album cover"
+                    image={item.product.image}
+                    alt='Live from space album cover'
                   />
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <CardContent sx={{ flex: "1 0 auto" }}>
-                      <Typography component="div" variant="h5">
-                        Sexy Shoes
+                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <CardContent sx={{ flex: '1 0 auto' }}>
+                      <Typography component='div' variant='h5'>
+                        {item.product.name}
                       </Typography>
-                      <Typography variant="subtitle1">Rs. 2000</Typography>
+                      <Typography variant='subtitle1'>
+                        Rs. {item.product.offer}
+                      </Typography>
                     </CardContent>
                     <Box
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
+                        display: 'flex',
+                        alignItems: 'center',
                         pl: 1,
                         pb: 1,
                       }}
                     >
                       <div>
                         <CustomIconButton
-                          sx={{ color: "white", borderRadius: 999 }}
-                          aria-label="upload picture"
-                          component="label"
+                          sx={{ color: 'white', borderRadius: 999 }}
+                          aria-label='upload picture'
+                          component='label'
                         >
                           <Remove />
                         </CustomIconButton>
                         <TextField
                           InputLabelProps={{
-                            sx: { color: "white" },
+                            sx: { color: 'white' },
                           }}
                           inputProps={{
-                            inputMode: "numeric",
-                            pattern: "[0-9]*",
+                            inputMode: 'numeric',
+                            pattern: '[0-9]*',
                           }}
                           value={1}
                           sx={{
                             input: {
-                              color: "white",
+                              color: 'white',
                               width: 50,
-                              textAlign: "center",
+                              textAlign: 'center',
                             },
                             marginLeft: 2,
                             marginRight: 2,
                           }}
-                          variant="standard"
+                          variant='standard'
                         />
                         <CustomIconButton
-                          sx={{ color: "white", borderRadius: 999 }}
-                          aria-label="upload picture"
-                          component="label"
+                          sx={{ color: 'white', borderRadius: 999 }}
+                          aria-label='upload picture'
+                          component='label'
                         >
                           <Add />
                         </CustomIconButton>
                         <CustomIconButton
-                          aria-label="upload picture"
-                          component="label"
+                          aria-label='upload picture'
+                          component='label'
                         >
                           <Delete />
                         </CustomIconButton>
@@ -110,26 +113,26 @@ function CartPage() {
         </Grid>
       </Container>
       <Stack
-        direction={"row"}
+        direction={'row'}
         gap={2}
         style={{
-          width: "100%",
-          background: "black",
+          width: '100%',
+          background: 'black',
           height: 100,
-          position: "sticky",
+          position: 'sticky',
           bottom: 0,
           zIndex: 1000,
           borderTopRightRadius: 20,
           borderTopLeftRadius: 20,
           padding: 20,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <Typography>Select Address </Typography>
+        <Typography>Select Address</Typography>
 
-        <Divider orientation="vertical" />
+        <Divider orientation='vertical' />
         <div>
           <CustomContainedButton>Place Order</CustomContainedButton>
         </div>

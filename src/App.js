@@ -17,7 +17,7 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <BrowserRouter>
-        <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} user={user} />
+        <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} user={user} setUser={setUser} />
         {user && user.role === 'ROLE_ADMIN' ? (
           <AdminNavigation loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         ) : user && user.role === 'ROLE_MANAGER' ? (
