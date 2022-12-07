@@ -51,8 +51,8 @@ function ItemCarousel({ data }) {
       swipeable={true}
       partialVisbile={true}
     >
-      {Array.from(data).map((item, id) => (
-        <div key={id}>
+      {Array.from(data).map((item, _id) => (
+        <div key={item.id}>
           {item ? (
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -60,7 +60,7 @@ function ItemCarousel({ data }) {
               onClick={() =>
                 navigate({
                   pathname: "/product",
-                  search: `id=${id}`,
+                  search: `id=${item.id}`,
                 })
               }
             >
@@ -94,7 +94,7 @@ function ItemCarousel({ data }) {
                         overflow: "scroll",
                       }}
                     >
-                      Shoes
+                      {item.name}
                     </Typography>
                     <Typography
                       variant="subtitle2"
@@ -104,7 +104,7 @@ function ItemCarousel({ data }) {
                         height: "0.8rem",
                       }}
                     >
-                      2000
+                      {item.offer}
                     </Typography>
                   </div>
                 </Box>
