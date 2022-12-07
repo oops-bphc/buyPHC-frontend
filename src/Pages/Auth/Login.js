@@ -18,8 +18,8 @@ var getCookies = function () {
   console.log(allCookies);
 };
 
-function Login({ setLoggedIn }) {
-  const [username, setUsername] = React.useState("");
+function Login({ setLoggedIn, setUser }) {
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [credentialError, setCredentialError] = React.useState(false);
@@ -41,15 +41,15 @@ function Login({ setLoggedIn }) {
       "token",
       "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY29nbnVzYm9pIiwiZXhwIjoxNjcwMzI2MDkwLCJpYXQiOjE2NzAzMjI0OTAsInNjb3BlIjoiUk9MRV9BRE1JTiJ9.ZFTS8uLNpk3bPmReeH_LIEtrVma1HxOFPjTKmP2rU_2fPGXWDE79__j1b8a8rcQoYWTZUMEVdKBV4mLyJiXqWHPdd7Zqw1IYN2lbUOoPdTszQvNsxWqWHdrp2Djud83KziUpo13VHnQKd5tgCGHyCCkYAKvPn7DZaK59Kk9lG2ur2ynRazWBAGCq3NFrM-R9Lru5yDXIz5N3QKZjGL55xqDPvQZtWynGscTVWwFakx4oE4lUKreDTxRT9IgsD4BnxD4fPojwSYH798v2FSib9oz5A9IyCvG8jJ8t-05-jUCBv4ISoNYGg5Dm1i5BKg83z5u-_2wbroIrNeHtzaH4qA"
     );
+		const response = await axios.get(
+			`${process.env.REACT_APP_ROOT_URL}/user`,
+			{ params: { email, password }, 
+				headers: { Authorization: localStorage.getItem("token") } 
+			},
+		);
+		setUser(response.data);
     setLoggedIn(true);
     navigate("/");
-    // const data = await axios.get(
-    //   `${process.env.REACT_APP_ROOT_URL}/product/all`,
-    //   {
-    //     headers: { Authorization: localStorage.getItem("token") },
-    //   }
-    // );
-    // console.log(data);
   };
 
   return (
@@ -86,14 +86,14 @@ function Login({ setLoggedIn }) {
         >
           <TextField
             id="loginEmail"
-            label="Username"
+            label="Email"
             size="small"
             type="text"
             InputLabelProps={{
               sx: { color: "primary.main" },
             }}
             sx={{ input: { color: "white" }, width: { xs: "90%", md: "70%" } }}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             id="loginPassword"

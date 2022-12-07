@@ -22,8 +22,7 @@ function ProductDetailPage({ loggedIn, data }) {
 		const fetchProductDetails = async () => {
 			const params = new URLSearchParams([['product-id', id]]);
 			const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/product`,
-				{ params },
-				{ headers: { Authorization: localStorage.getItem("token") } },
+				{ params, headers: { Authorization: localStorage.getItem("token") } },
 				);
 			setProductDetails(response.data);
 		};

@@ -26,7 +26,7 @@ function Footer() {
           cursor: "default",
         }}
       >
-        A N I L I T E
+        BuyPHC
       </Typography>
       <Link to="/about-us" exact>
         <Typography

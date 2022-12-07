@@ -7,6 +7,7 @@ import ItemCarousel from "../../../Components/ItemCarousel";
 function Homepage({ products, setProducts }) {
 	const [fashion, setFashion] = React.useState([]);
 	const [electronics, setElectronics] = React.useState([]);
+
   React.useEffect(() => {
     const AllProducts = async () => {
       const data = await axios.get(
@@ -15,7 +16,6 @@ function Homepage({ products, setProducts }) {
           headers: { Authorization: localStorage.getItem("token") },
         }
       );
-      console.log(data);
       setProducts(data.data);
       // var xhr = new XMLHttpRequest();
       // xhr.open("GET", `${process.env.REACT_APP_ROOT_URL}/product/all`);
