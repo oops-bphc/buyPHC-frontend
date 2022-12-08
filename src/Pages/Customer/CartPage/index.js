@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Container } from "../../../Components/Container";
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
@@ -17,32 +17,60 @@ import {
   CustomIconButton,
 } from "../../../Components/Button/CustomButton";
 import { Stack } from "@mui/system";
-import axios from 'axios';
+import axios from "axios";
 
 function CartPage({ user, setUser }) {
-  const [searchParams] = useSearchParams();
-  let id = searchParams?.get("id");
+  const [cartItems, setCartItems] = React.useState([]);
+  const [cartTotal, setCartTotal] = React.useState(0);
+  const [wallet, setWallet] = React.useState(0);
 
-  const [cartItems, setCartItems] = React.useState(
-    user.cart.filter((cartItem) => cartItem !== null && cartItem.status === "IN_CART")
-  );
+  const navigate = useNavigate();
 
   const modifyCartItemQty = async (cartItem, qty) => {
-		await axios.post(
-			`${process.env.REACT_APP_ROOT_URL}/cart`,
-			{'customerId': user.id, 'productId': cartItem.product.id, 'qty': qty}
-		);
-		const response = await axios.get(
-			`${process.env.REACT_APP_ROOT_URL}/customer`,
-			{ params: {'customer-id': user.id} }
-		);
-		console.log(response.data);
-		setUser(response.data);
-	};
+    await axios.post(`${process.env.REACT_APP_ROOT_URL}/cart`, {
+      customerId: user.id,
+      productId: cartItem.product.id,
+      qty: qty,
+    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_ROOT_URL}/customer`,
+      { params: { "customer-id": user.id } }
+    );
+    console.log(response.data);
+  };
 
-	React.useEffect(() => {
-		setCartItems(user.cart.filter(cartItem => cartItem !== null && cartItem.status === "IN_CART"))
-		}, [user]);
+  const placeOrder = async () => {
+    await axios.put(
+      `${process.env.REACT_APP_ROOT_URL}/cart/order?customer-id=${user.id}`
+    );
+    cartData();
+  };
+
+  const cartTotalAmount = async () => {
+    const total = await axios.get(
+      `${process.env.REACT_APP_ROOT_URL}/cart?customer-id=${user.id}`
+    );
+    setCartTotal(total.data);
+  };
+
+  const cartData = async () => {
+    const userData = await axios.get(
+      `${process.env.REACT_APP_ROOT_URL}/customer?customer-id=${user.id}`
+    );
+    console.log(userData);
+    setCartItems(
+      userData?.data?.cart?.filter(
+        (cartItem) => cartItem !== null && cartItem.status === "IN_CART"
+      )
+    );
+    setWallet(userData.data.wallet);
+  };
+
+  React.useEffect(() => {
+    if (cartItems.length === 0) cartData();
+
+    cartTotalAmount();
+  }, []);
 
   return (
     <>
@@ -51,7 +79,7 @@ function CartPage({ user, setUser }) {
           <Grid item md={4} />
           <Grid item md={4}>
             <Stack gap={2}>
-              {cartItems.map((item) => (
+              {cartItems?.map((item) => (
                 <Card
                   key={item.id}
                   sx={{
@@ -88,7 +116,7 @@ function CartPage({ user, setUser }) {
                           sx={{ color: "white", borderRadius: 999 }}
                           aria-label="upload picture"
                           component="label"
-													onClick={() => modifyCartItemQty(item, item.qty - 1)}
+                          onClick={() => modifyCartItemQty(item, item.qty - 1)}
                         >
                           <Remove />
                         </CustomIconButton>
@@ -116,7 +144,7 @@ function CartPage({ user, setUser }) {
                           sx={{ color: "white", borderRadius: 999 }}
                           aria-label="upload picture"
                           component="label"
-													onClick={() => modifyCartItemQty(item, item.qty + 1)}
+                          onClick={() => modifyCartItemQty(item, item.qty + 1)}
                         >
                           <Add />
                         </CustomIconButton>
@@ -144,7 +172,7 @@ function CartPage({ user, setUser }) {
           width: "100%",
           background: "black",
           height: 100,
-          position: "sticky",
+          position: "absolute",
           bottom: 0,
           zIndex: 1000,
           borderTopRightRadius: 20,
@@ -155,11 +183,20 @@ function CartPage({ user, setUser }) {
           alignItems: "center",
         }}
       >
-        <Typography>Select Address</Typography>
+        <Typography>Address: {user?.address}</Typography>
 
-        <Divider orientation="vertical" />
+        <Divider orientation="vertical" style={{ background: "white" }} />
+        <Typography>Total Amount: {cartTotal}</Typography>
+        <Divider orientation="vertical" style={{ background: "white" }} />
+        <Typography>Wallet Balance: {wallet}</Typography>
         <div>
-          <CustomContainedButton>Place Order</CustomContainedButton>
+          <CustomContainedButton
+            onClick={() =>
+              wallet < cartTotal ? navigate("/wallet") : placeOrder()
+            }
+          >
+            {wallet < cartTotal ? "Add money" : "Place Order"}
+          </CustomContainedButton>
         </div>
       </Stack>
     </>

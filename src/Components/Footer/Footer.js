@@ -43,7 +43,7 @@ function Footer() {
             cursor: "pointer",
           }}
         >
-          Made with ❤️ by SHIVANSH & AARUSH
+          Made with ❤️ by Aarush, Sabhyasachi, Chinmay, Soumya
         </Typography>
       </Link>
 

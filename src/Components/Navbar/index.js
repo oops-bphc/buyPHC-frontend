@@ -6,18 +6,18 @@ import {
   Stack,
   Menu,
   MenuItem,
-} from '@mui/material';
-import React from 'react';
-import { useLocation, NavLink, useNavigate } from 'react-router-dom';
-import { CustomOutlinedButton, CustomTextButton } from '../Button/CustomButton';
-import SearchModal from '../Search';
+} from "@mui/material";
+import React from "react";
+import { useLocation, NavLink, useNavigate } from "react-router-dom";
+import { CustomOutlinedButton, CustomTextButton } from "../Button/CustomButton";
+import SearchModal from "../Search";
 
-const NavBarItem = ({label, link}) => {
+const NavBarItem = ({ label, link }) => {
   return (
     <NavLink
-      style={({isActive}) => {
+      style={({ isActive }) => {
         return {
-          background: isActive ? 'rgba(139, 92, 246, 1)' : '',
+          background: isActive ? "rgba(139, 92, 246, 1)" : "",
           borderRadius: 3,
         };
       }}
@@ -28,7 +28,13 @@ const NavBarItem = ({label, link}) => {
   );
 };
 
-export default function Navbar({ loggedIn, setLoggedIn, user, setUser }) {
+export default function Navbar({
+  loggedIn,
+  setLoggedIn,
+  user,
+  setUser,
+  products,
+}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -52,83 +58,74 @@ export default function Navbar({ loggedIn, setLoggedIn, user, setUser }) {
   };
 
   React.useEffect(() => {
-    if (location.pathname === '/' || location.pathname.includes('/anime/')) {
+    if (location.pathname === "/" || location.pathname.includes("/anime/")) {
       setNavbarOpacity(0);
-      window.addEventListener('scroll', listenScrollEvent);
-      return () => window.removeEventListener('scroll', listenScrollEvent);
+      window.addEventListener("scroll", listenScrollEvent);
+      return () => window.removeEventListener("scroll", listenScrollEvent);
     } else {
       setNavbarOpacity(1);
     }
   }, [location.pathname]);
 
   const Logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setLoggedIn(false);
-		setUser({});
-    navigate('/');
+    setUser({});
+    navigate("/");
   };
 
   return (
     <>
-      <Box sx={{ flexGrow: 1, display: { xs: 'none', lg: 'block' } }}>
+      <Box sx={{ flexGrow: 1, display: { xs: "none", lg: "block" } }}>
         <AppBar
-          position='fixed'
+          position="fixed"
           sx={{
             background: `rgba(0,0,0,${navbarOpacity})`,
             height: 48,
-            justifyContent: 'center',
+            justifyContent: "center",
           }}
         >
           <Toolbar>
-            <Stack direction='row' spacing={0.25}>
+            <Stack direction="row" spacing={0.25}>
               {loggedIn ? (
-                user && user.role === 'ROLE_CUSTOMER' ? (
+                user && user.role === "ROLE_CUSTOMER" ? (
                   <>
-										<NavBarItem
-											label="Home"
-											link="/"
-										/>
-										<NavBarItem
-											label="Cart"
-											link="/cart"
-										/>
-										<NavBarItem
-											label="Wallet"
-											link="/wallet"
-										/>
+                    <NavBarItem label="Home" link="/" />
+                    <NavBarItem label="Cart" link="/cart" />
+                    <NavBarItem label="Wallet" link="/wallet" />
                   </>
                 ) : null
               ) : null}
             </Stack>
             <div
               style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                cursor: 'pointer',
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+                cursor: "pointer",
               }}
             >
-              <Typography variant='h4' color='secondary'>
-                <NavLink style={{ color: 'white' }} to='/'>
+              <Typography variant="h4" color="secondary">
+                <NavLink style={{ color: "white" }} to="/">
                   BuyPHC
                 </NavLink>
               </Typography>
             </div>
             <Stack
-              direction={'row'}
+              direction={"row"}
               gap={2}
-              sx={{ marginLeft: 'auto', marginRight: 0, alignItems: 'center' }}
+              sx={{ marginLeft: "auto", marginRight: 0, alignItems: "center" }}
             >
-              <SearchModal />
+              <SearchModal data={products} />
               {!loggedIn ? (
                 <NavLink
                   style={({ isActive }) => {
                     return {
-                      background: isActive ? 'rgba(139, 92, 246, 1)' : '',
+                      background: isActive ? "rgba(139, 92, 246, 1)" : "",
                       borderRadius: 3,
                     };
                   }}
-                  to='/login'
+                  to="/login"
                 >
                   <CustomOutlinedButton>Login</CustomOutlinedButton>
                 </NavLink>
@@ -138,26 +135,27 @@ export default function Navbar({ loggedIn, setLoggedIn, user, setUser }) {
                     Hi, {user.username}
                   </CustomOutlinedButton>
                   <Menu
-                    id='basic-menu'
+                    id="basic-menu"
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
                     MenuListProps={{
-                      'aria-labelledby': 'basic-button',
+                      "aria-labelledby": "basic-button",
                     }}
                   >
                     <MenuItem
                       onClick={() => {
-                        navigate('/my-account');
+                        navigate("/my-account");
                         handleClose();
                       }}
                     >
                       My Account
                     </MenuItem>
-                    {Object.keys(user).length !== 0  && user.role === 'ROLE_CUSTOMER' ? (
+                    {Object.keys(user).length !== 0 &&
+                    user.role === "ROLE_CUSTOMER" ? (
                       <MenuItem
                         onClick={() => {
-                          navigate('/my-orders');
+                          navigate("/my-orders");
                           handleClose();
                         }}
                       >

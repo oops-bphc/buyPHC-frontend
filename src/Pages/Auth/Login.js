@@ -41,13 +41,13 @@ function Login({ setLoggedIn, setUser }) {
       "token",
       "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY29nbnVzYm9pIiwiZXhwIjoxNjcwMzI2MDkwLCJpYXQiOjE2NzAzMjI0OTAsInNjb3BlIjoiUk9MRV9BRE1JTiJ9.ZFTS8uLNpk3bPmReeH_LIEtrVma1HxOFPjTKmP2rU_2fPGXWDE79__j1b8a8rcQoYWTZUMEVdKBV4mLyJiXqWHPdd7Zqw1IYN2lbUOoPdTszQvNsxWqWHdrp2Djud83KziUpo13VHnQKd5tgCGHyCCkYAKvPn7DZaK59Kk9lG2ur2ynRazWBAGCq3NFrM-R9Lru5yDXIz5N3QKZjGL55xqDPvQZtWynGscTVWwFakx4oE4lUKreDTxRT9IgsD4BnxD4fPojwSYH798v2FSib9oz5A9IyCvG8jJ8t-05-jUCBv4ISoNYGg5Dm1i5BKg83z5u-_2wbroIrNeHtzaH4qA"
     );
-		const response = await axios.get(
-			`${process.env.REACT_APP_ROOT_URL}/user`,
-			{ params: { email, password }, 
-				headers: { Authorization: localStorage.getItem("token") } 
-			},
-		);
-		setUser(response.data);
+    const response = await axios.get(
+      `${process.env.REACT_APP_ROOT_URL}/user?email=${email}&password=${password}`,
+      {
+        headers: { Authorization: localStorage.getItem("token") },
+      }
+    );
+    setUser(response.data);
     setLoggedIn(true);
     navigate("/");
   };

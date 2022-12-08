@@ -4,13 +4,31 @@ import { Container } from "../../../Components/Container";
 import Masonry from "react-masonry-css";
 import "./styles.css";
 import HoverCard from "../../../Components/HoverCard";
+import axios from "axios";
 
-function OrderHistoryPage() {
-  const [value, setValue] = React.useState("current");
+function OrderHistoryPage({ user }) {
+  const [currentOrders, setCurrentOrders] = React.useState([]);
 
   const breakpointColumnsObj = {
     default: 4,
   };
+
+  React.useEffect(() => {
+    const orders = async () => {
+      const order = await axios.get(
+        `${process.env.REACT_APP_ROOT_URL}/customer?customer-id=${user.id}`
+      );
+      setCurrentOrders(
+        order?.data?.cart?.filter(
+          (cartItem) => cartItem !== null && cartItem.status === "ORDERED"
+        )
+      );
+    };
+    if (currentOrders.length === 0) orders();
+  }, [currentOrders]);
+
+  console.log(currentOrders);
+
   return (
     <>
       <Container>
@@ -25,7 +43,7 @@ function OrderHistoryPage() {
               className="my-masonry-grid"
               columnClassName="my-masonry-grid_column"
             >
-              {[1, 1, 1, 1, 1, 1].map((item, id) => (
+              {currentOrders?.map((item, id) => (
                 <HoverCard key={id} item={item} type={"current"} />
               ))}
             </Masonry>

@@ -11,20 +11,17 @@ import { CustomContainedButton } from "../../../Components/Button/CustomButton";
 import { Container } from "../../../Components/Container";
 import axios from "axios";
 
-function WalletPage({user, setUser}) {
-	const [amount, setAmount] = React.useState(0);
+function WalletPage({ user, setUser }) {
+  const [amount, setAmount] = React.useState(0);
 
-	const handleSubmit = async () => {
-		const newUser = {...user, 'wallet': user['wallet'] + amount};
-		setUser(newUser)
-		await axios.put(`${process.env.REACT_APP_ROOT_URL}/customer`,
-			newUser,
-			{ 
-				params: {'customer-id': user.id}, 
-				headers: { Authorization: localStorage.getItem("token") }
-			},
-		);
-	};
+  const handleSubmit = async () => {
+    const newUser = { ...user, wallet: user["wallet"] + parseInt(amount) };
+    setUser(newUser);
+    await axios.put(`${process.env.REACT_APP_ROOT_URL}/customer`, newUser, {
+      params: { "customer-id": user.id },
+      headers: { Authorization: localStorage.getItem("token") },
+    });
+  };
 
   return (
     <Container>
@@ -87,8 +84,8 @@ function WalletPage({user, setUser}) {
                   id="gorgotPassword"
                   label="Enter Amount"
                   size="small"
-									value={amount}
-									onChange={(e) => setAmount(parseInt(e.target.value))}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                   inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                   InputLabelProps={{
                     sx: { color: "primary.main" },
@@ -99,9 +96,7 @@ function WalletPage({user, setUser}) {
                   }}
                 />
 
-                <CustomContainedButton
-									onClick={handleSubmit}
-                >
+                <CustomContainedButton onClick={handleSubmit}>
                   Add
                 </CustomContainedButton>
               </div>

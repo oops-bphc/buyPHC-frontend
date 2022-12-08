@@ -19,6 +19,7 @@ export default function SearchModal({ data }) {
   const [open, setOpen] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState("");
   const [cursor, setCursor] = React.useState(null);
+  const [filterData, setFilterData] = React.useState([]);
 
   // const [border, setBorder] = React.useState("0.75rem 0.75rem 0 0");
 
@@ -30,6 +31,7 @@ export default function SearchModal({ data }) {
     setOpen(false);
     setCursor(null);
     setSearchWord("");
+    setFilterData([]);
   };
 
   const handleFilter = (event) => {
@@ -37,7 +39,13 @@ export default function SearchModal({ data }) {
     setSearchWord(searchWord);
 
     if (searchWord !== "") {
+      setFilterData(
+        data.filter(({ name }) =>
+          name.toLowerCase().includes(searchWord.toLowerCase())
+        )
+      );
     } else {
+      setFilterData([]);
     }
   };
 
@@ -58,6 +66,8 @@ export default function SearchModal({ data }) {
       document.getElementsByClassName("active-listitem")[0].click();
     }
   };
+
+  console.log(filterData);
   return (
     <div>
       <IconButton aria-label="Search" color="primary" onClick={handleOpen}>
@@ -135,14 +145,10 @@ export default function SearchModal({ data }) {
                   width: { xs: "100%", md: "50%" },
                 }}
               >
-                {[1, 1, 1, 1, 1, 1, 1].map((item, id) => (
+                {filterData?.map((item, id) => (
                   <Link
                     key={id}
-                    to={
-                      item.name_en
-                        ? `/anime/${item.slug}`
-                        : `/character/${item.slug}`
-                    }
+                    to={`/product?id=${item.id}`}
                     onClick={handleClose}
                     className={cursor === id ? "active-listitem" : null}
                     role={"button"}
@@ -164,12 +170,12 @@ export default function SearchModal({ data }) {
                           fontWeight: 400,
                         }}
                       >
-                        {item.name_en || item.name}
+                        {item.name}
                       </Typography>
                     </ListItem>
                   </Link>
                 ))}
-                {[1, 1, 1, 1, 1, 1, 1, 1, 1].length > 7 ? (
+                {filterData?.length > 7 ? (
                   <Link
                     to={`/search?search=${searchWord}`}
                     onClick={handleClose}
@@ -199,8 +205,7 @@ export default function SearchModal({ data }) {
                 ) : null}
               </Box>
             </Box>
-            {([1, 1, 1, 1, 11, 1, 1, 1, 1].length === 0) &
-            (searchWord === "") ? (
+            {(filterData?.length === 0) & (searchWord === "") ? (
               <UndrawLocationSearch
                 style={{
                   position: "relative",
@@ -210,8 +215,7 @@ export default function SearchModal({ data }) {
                   transform: "translateX(-50%)",
                 }}
               />
-            ) : ([1, 1, 1, 1, 1, 1, 1, 1, 1].length === 0) &
-              (searchWord !== "") ? (
+            ) : (filterData?.length === 0) & (searchWord !== "") ? (
               <UndrawVoid
                 style={{
                   position: "relative",

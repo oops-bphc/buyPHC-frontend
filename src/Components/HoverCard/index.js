@@ -26,7 +26,7 @@ function HoverCard({ item, type }) {
       <CardMedia
         component="img"
         sx={{ width: "100%" }}
-        image="https://images.meesho.com/images/products/44009963/kxwus_512.jpg"
+        image={item?.product?.image}
       />
       <Box
         sx={{
@@ -45,11 +45,13 @@ function HoverCard({ item, type }) {
           }}
         >
           <Typography component="div" variant="h6">
-            Sexy Shoes
+            {item?.product?.name}
           </Typography>
 
           {type === "old" ? null : (
-            <Typography variant="subtitle2">Delivery by 01-01-23</Typography>
+            <Typography variant="subtitle2">
+              Delivery within {item?.product?.deliveryTime} business days
+            </Typography>
           )}
         </CardContent>
       </Box>
@@ -61,7 +63,10 @@ function HoverCard({ item, type }) {
           <Typography variant="body2">Hover for details</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="subtitle1">Rs. 2000</Typography>
+          <Typography variant="subtitle1">Qty: {item?.qty}</Typography>
+          <Typography variant="subtitle1">
+            Rs. {item?.product?.offer * item?.qty}
+          </Typography>
           {type === "current" ? null : (
             <Typography variant="subtitle2">Delivered on 01-01-23</Typography>
           )}
