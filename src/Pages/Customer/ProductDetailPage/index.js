@@ -11,7 +11,7 @@ import {
 import { Stack } from '@mui/system';
 import axios from 'axios';
 
-function ProductDetailPage({ loggedIn, user, setUser }) {
+function ProductDetailPage({ loggedIn, user, setUser, products }) {
   const [searchParams] = useSearchParams();
   let id = searchParams?.get('id');
   const [productDetails, setProductDetails] = React.useState({});
@@ -22,7 +22,7 @@ function ProductDetailPage({ loggedIn, user, setUser }) {
     const fetchProductDetails = async () => {
       const response = await axios.get(
         `${process.env.REACT_APP_ROOT_URL}/product`,
-        { params : {'product-id': id} }
+        { params: { 'product-id': id } }
       );
       setProductDetails(response.data);
     };
@@ -32,14 +32,11 @@ function ProductDetailPage({ loggedIn, user, setUser }) {
   const handleAddToCartEvent = async () => {
     console.log(user);
     if (user === null || user === {} || user.id == null) return;
-    await axios.post(
-      `${process.env.REACT_APP_ROOT_URL}/cart`,
-      {
-        customerId: user.id,
-        productId: id,
-        qty: qty,
-      },
-    );
+    await axios.post(`${process.env.REACT_APP_ROOT_URL}/cart`, {
+      customerId: user.id,
+      productId: id,
+      qty: qty,
+    });
     const response = await axios.get(
       `${process.env.REACT_APP_ROOT_URL}/customer`,
       {
@@ -99,7 +96,13 @@ function ProductDetailPage({ loggedIn, user, setUser }) {
           <Grid item md={12}>
             <div style={{ marginTop: 60, marginBottom: 20 }}>
               <Typography variant='h4'>Similar Products</Typography>
-              <ItemCarousel data={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]} />
+              <ItemCarousel
+                data={products.filter(
+                  (product) =>
+                    product.id != productDetails.id &&
+                    product.category == productDetails.category
+                )}
+              />
             </div>
           </Grid>
         </Grid>

@@ -1,19 +1,19 @@
-import React from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import { styled, Typography, Box, Skeleton } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import React from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import { styled, Typography, Box, Skeleton } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-const CustomImg = styled("img")(({ theme }) => ({
-  width: "170px",
+const CustomImg = styled('img')(({ theme }) => ({
+  width: '170px',
   marginLeft: 10,
   marginRight: 10,
   borderRadius: 5,
-  position: "relative",
-  left: "50%",
-  transform: "translateX(-50%)",
-  loading: "lazy",
+  position: 'relative',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  loading: 'lazy',
 }));
 
 function ItemCarousel({ data }) {
@@ -56,10 +56,10 @@ function ItemCarousel({ data }) {
           {item ? (
             <motion.div
               whileHover={{ scale: 1.05 }}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={() =>
                 navigate({
-                  pathname: "/product",
+                  pathname: '/product',
                   search: `id=${item.id}`,
                 })
               }
@@ -67,41 +67,39 @@ function ItemCarousel({ data }) {
               <div>
                 <div>
                   <CustomImg
-                    id="listitems"
-                    src={
-                      "https://images.meesho.com/images/products/44009963/kxwus_512.jpg"
-                    }
+                    id='listitems'
+                    src={item.image}
                     alt={item.name_en || item.name}
                   />
                 </div>
                 <Box style={{ height: 50 }}>
                   <div
                     style={{
-                      width: "85%",
-                      position: "relative",
-                      marginLeft: "auto",
-                      marginRight: "auto",
+                      width: '85%',
+                      position: 'relative',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
                       paddingLeft: 20,
-                      textAlign: "center",
+                      textAlign: 'center',
                     }}
                   >
                     <Typography
-                      variant="subtitle2"
-                      color="secondary"
+                      variant='subtitle2'
+                      color='secondary'
                       sx={{
-                        wordWrap: "break-word",
-                        height: "1.55rem",
-                        overflow: "scroll",
+                        wordWrap: 'break-word',
+                        height: '1.55rem',
+                        overflow: 'scroll',
                       }}
                     >
                       {item.name}
                     </Typography>
                     <Typography
-                      variant="subtitle2"
-                      color="primary.light"
+                      variant='subtitle2'
+                      color='primary.light'
                       sx={{
-                        wordWrap: "break-word",
-                        height: "0.8rem",
+                        wordWrap: 'break-word',
+                        height: '0.8rem',
                       }}
                     >
                       {item.offer}
@@ -111,7 +109,7 @@ function ItemCarousel({ data }) {
               </div>
             </motion.div>
           ) : (
-            <Skeleton variant="rectangular" />
+            <Skeleton variant='rectangular' />
           )}
         </div>
       ))}
