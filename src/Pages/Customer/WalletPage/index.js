@@ -17,7 +17,7 @@ function WalletPage({user, setUser}) {
 	const handleSubmit = async () => {
 		const newUser = {...user, 'wallet': user['wallet'] + amount};
 		setUser(newUser)
-		await axios.put(`${process.env.REACT_APP_ROOT_URL}/customer`,
+		await axios.put("/customer",
 			newUser,
 			{ 
 				params: {'customer-id': user.id}, 

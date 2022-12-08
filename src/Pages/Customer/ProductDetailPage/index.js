@@ -21,8 +21,8 @@ function ProductDetailPage({ loggedIn, user, setUser }) {
 
   React.useEffect(() => {
     const fetchProductDetails = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_ROOT_URL}/product`,
+			const response = await axios.get(
+				"/product",
         { params: { 'product-id': id } }
       );
       setProductDetails(response.data);
@@ -33,7 +33,7 @@ function ProductDetailPage({ loggedIn, user, setUser }) {
 	React.useEffect(() => {
 		const fetchByCategory = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_ROOT_URL}/product/${productDetails.category}`
+        `/product/${productDetails.category}`
       );
 			setSimilar(response.data);
 		}
@@ -43,13 +43,13 @@ function ProductDetailPage({ loggedIn, user, setUser }) {
   const handleAddToCartEvent = async () => {
     console.log(user);
     if (user === null || user === {} || user.id == null) return;
-    await axios.post(`${process.env.REACT_APP_ROOT_URL}/cart`, {
+    await axios.post("/cart", {
       customerId: user.id,
       productId: id,
       qty: qty,
     });
     const response = await axios.get(
-      `${process.env.REACT_APP_ROOT_URL}/customer`,
+      "/customer",
       {
         params: {
           'customer-id': user.id,

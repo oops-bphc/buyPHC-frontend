@@ -62,7 +62,7 @@ export default function Navbar({ loggedIn, setLoggedIn, user, setUser }) {
   }, [location.pathname]);
 
   const Logout = () => {
-    localStorage.removeItem('token');
+    localStorage.setItem('loggedIn', 0);
     setLoggedIn(false);
 		setUser({});
     navigate('/');
@@ -120,7 +120,7 @@ export default function Navbar({ loggedIn, setLoggedIn, user, setUser }) {
               sx={{ marginLeft: 'auto', marginRight: 0, alignItems: 'center' }}
             >
               <SearchModal />
-              {!loggedIn ? (
+              {!loggedIn || user.username === null ? (
                 <NavLink
                   style={({ isActive }) => {
                     return {

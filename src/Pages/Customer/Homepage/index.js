@@ -15,7 +15,7 @@ function Homepage({ products, setProducts }) {
   React.useEffect(() => { // Get a list of all the categories 
     const getAllCategories = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_ROOT_URL}/product/categories`
+        "/product/categories"
       );
       setCategories(response.data);
     };
@@ -25,7 +25,7 @@ function Homepage({ products, setProducts }) {
   React.useEffect(() => { // Get all the products
     const AllProducts = async () => {
       const repsonse = await axios.get(
-        `${process.env.REACT_APP_ROOT_URL}/product/all`
+        "/product/all"
       );
       setProducts(repsonse.data);
     };

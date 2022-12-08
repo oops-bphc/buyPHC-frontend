@@ -10,6 +10,7 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
+		setLoggedIn(localStorage.getItem('loggedIn') === "1")
     if (localStorage.getItem('token')) {
       setLoggedIn(true);
     }

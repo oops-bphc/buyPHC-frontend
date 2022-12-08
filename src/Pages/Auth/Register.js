@@ -42,7 +42,7 @@ function Register() {
 
 	const handleSubmit = async () => {
 		await axios.post(
-			`${process.env.REACT_APP_ROOT_URL}/customer`,
+			"/customer",
 			{username, password, phoneNumber, email, address, wallet: 1000}
 		).catch(console.error);
 	};

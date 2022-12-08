@@ -67,7 +67,7 @@ function AccountPage({ user, setUser }) {
 			address
 		};
 		setUser(newUser);
-		await axios.put(`${process.env.REACT_APP_ROOT_URL}/customer`,
+		await axios.put("/customer",
 			newUser,
 			{ 
 				params: {'customer-id': user.id}, 

@@ -29,11 +29,11 @@ function CartPage({ user, setUser }) {
 
   const modifyCartItemQty = async (cartItem, qty) => {
 		await axios.post(
-			`${process.env.REACT_APP_ROOT_URL}/cart`,
+			"/cart",
 			{'customerId': user.id, 'productId': cartItem.product.id, 'qty': qty}
 		);
 		const response = await axios.get(
-			`${process.env.REACT_APP_ROOT_URL}/customer`,
+			"/customer",
 			{ params: {'customer-id': user.id} }
 		);
 		console.log(response.data);
