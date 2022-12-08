@@ -32,7 +32,7 @@ function CustomerNavigation({ loggedIn, setLoggedIn, user, setUser }) {
                 element={<ProductDetailPage loggedIn={loggedIn} user={user} setUser={setUser}/>}
               />
               <Route path='/reset-password' element={<ResetPassword />} />
-              <Route path='/cart' element={<CartPage user={user} />} />
+              <Route path='/cart' element={<CartPage user={user} setUser={setUser} />} />
               <Route path='/wallet' element={<WalletPage user={user} setUser={setUser} />} />
               <Route path='/my-orders' element={<OrderHistoryPage />} />
               <Route

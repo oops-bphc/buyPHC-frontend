@@ -81,7 +81,7 @@ export default function Navbar({ loggedIn, setLoggedIn, user, setUser }) {
         >
           <Toolbar>
             <Stack direction='row' spacing={0.25}>
-              {Object.keys(user).length !== 0 && loggedIn ? (
+              {loggedIn ? (
                 user && user.role === 'ROLE_CUSTOMER' ? (
                   <>
 										<NavBarItem

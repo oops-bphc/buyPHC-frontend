@@ -5,8 +5,8 @@ import HomePageCarousel from "../../../Components/HomepageCarousel";
 import ItemCarousel from "../../../Components/ItemCarousel";
 
 function Homepage({ products, setProducts }) {
-	const [fashion, setFashion] = React.useState([]);
-	const [electronics, setElectronics] = React.useState([]);
+  const [fashion, setFashion] = React.useState([]);
+  const [electronics, setElectronics] = React.useState([]);
 
   React.useEffect(() => {
     const AllProducts = async () => {
@@ -31,16 +31,18 @@ function Homepage({ products, setProducts }) {
     AllProducts();
   }, []);
 
-	const useCategory = (category, setFunc) => {
-		React.useEffect(() => {
-			axios.get(`${process.env.REACT_APP_ROOT_URL}/product/${category}`,
-				{ headers: { Authorization: localStorage.getItem("token") } }
-				).then(response => setFunc(response.data));
-		}, []);
-	};
+  const useCategory = (category, setFunc) => {
+    React.useEffect(() => {
+      axios
+        .get(`${process.env.REACT_APP_ROOT_URL}/product/${category}`, {
+          headers: { Authorization: localStorage.getItem("token") },
+        })
+        .then((response) => setFunc(response.data));
+    }, []);
+  };
 
-	useCategory("FASHION", setFashion);
-	useCategory("ELECTRONICS", setElectronics);
+  useCategory("FASHION", setFashion);
+  useCategory("ELECTRONICS", setElectronics);
   return (
     <>
       <HomePageCarousel />
