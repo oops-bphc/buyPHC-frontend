@@ -51,7 +51,7 @@ function ItemCarousel({ data }) {
       swipeable={true}
       partialVisible={true}
     >
-      {Array.from(data).map((item, _id) => (
+      {Array.from(data).map(item => (
         <div key={item.id}>
           {item ? (
             <motion.div

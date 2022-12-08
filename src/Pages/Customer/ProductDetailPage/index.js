@@ -11,12 +11,13 @@ import {
 import { Stack } from '@mui/system';
 import axios from 'axios';
 
-function ProductDetailPage({ loggedIn, user, setUser, products }) {
+function ProductDetailPage({ loggedIn, user, setUser }) {
   const [searchParams] = useSearchParams();
   let id = searchParams?.get('id');
   const [productDetails, setProductDetails] = React.useState({});
   const navigate = useNavigate();
   const [qty, setQty] = React.useState(1);
+	const [similar, setSimilar] = React.useState([]);
 
   React.useEffect(() => {
     const fetchProductDetails = async () => {
@@ -28,6 +29,16 @@ function ProductDetailPage({ loggedIn, user, setUser, products }) {
     };
     fetchProductDetails().catch(console.error);
   }, []);
+
+	React.useEffect(() => {
+		const fetchByCategory = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_ROOT_URL}/product/${productDetails.category}`
+      );
+			setSimilar(response.data);
+		}
+		fetchByCategory()
+		}, [])
 
   const handleAddToCartEvent = async () => {
     console.log(user);
@@ -97,7 +108,7 @@ function ProductDetailPage({ loggedIn, user, setUser, products }) {
             <div style={{ marginTop: 60, marginBottom: 20 }}>
               <Typography variant='h4'>Similar Products</Typography>
               <ItemCarousel
-                data={products.filter(
+                data={similar.filter(
                   (product) =>
                     product.id != productDetails.id &&
                     product.category == productDetails.category
